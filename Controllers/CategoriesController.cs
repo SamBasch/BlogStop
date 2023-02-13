@@ -7,24 +7,28 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlogStop.Data;
 using BlogStop.Models;
+using BlogStop.Services.Interfaces;
 
 namespace BlogStop.Controllers
 {
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IImageService _imageService;
 
-        public CategoriesController(ApplicationDbContext context)
+
+        public CategoriesController(ApplicationDbContext context, IImageService imageService)
         {
             _context = context;
+            _imageService = imageService;   
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-              return _context.Categories != null ? 
-                          View(await _context.Categories.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
+                IEnumerable<Category> categories = await _context.Categories.Include(c => c.BlogPosts).ToListAsync();
+
+            return View(categories);    
         }
 
         // GET: Categories/Details/5
@@ -56,10 +60,21 @@ namespace BlogStop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,ImageData,ImageType")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Image")] Category category)
         {
             if (ModelState.IsValid)
+
             {
+
+
+
+                if (category.Image != null)
+                {
+                    category.ImageData = await _imageService.ConvertFileToByteArrayAsync(category.Image);
+                    category.ImageType = category.Image.ContentType;
+                }
+
+
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -99,6 +114,14 @@ namespace BlogStop.Controllers
             {
                 try
                 {
+
+                    if (category.Image != null)
+                    {
+                        category.ImageData = await _imageService.ConvertFileToByteArrayAsync(category.Image);
+                        category.ImageType = category.Image.ContentType;
+                    }
+
+
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }

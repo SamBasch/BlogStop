@@ -22,9 +22,9 @@ namespace BlogStop.Controllers
         // GET: Tags
         public async Task<IActionResult> Index()
         {
-              return _context.Tags != null ? 
-                          View(await _context.Tags.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Tags'  is null.");
+             IEnumerable<Tag> tags = await _context.Tags.Include(t => t.BlogPosts).ToListAsync(); 
+            
+            return View(tags);  
         }
 
         // GET: Tags/Details/5

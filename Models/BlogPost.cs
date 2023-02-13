@@ -6,7 +6,7 @@ namespace BlogStop.Models
     public class BlogPost
     {
 
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
 
 

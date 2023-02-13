@@ -27,9 +27,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Updated)
             </th>
-            <th>
+@*            <th>
                 @Html.DisplayNameFor(model => model.Slug)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.IsDeleted)
             </th>
@@ -37,14 +37,12 @@
                 @Html.DisplayNameFor(model => model.IsPublished)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ImageData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageType)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tags)
+            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -66,9 +64,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Updated)
             </td>
-            <td>
+@*            <td>
                 @Html.DisplayFor(modelItem => item.Slug)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.IsDeleted)
             </td>
@@ -76,13 +74,15 @@
                 @Html.DisplayFor(modelItem => item.IsPublished)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageData)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageType)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td> 
+                    @foreach (Tag tag in item.Tags)
+                    {
+
+                                <p>@tag.Name</p>
+
+                    }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
