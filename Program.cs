@@ -4,7 +4,7 @@ using BlogStop.Services.Interfaces;
 using BlogStop.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using BlogStop.Services.Intefaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,13 +18,14 @@ builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.R
     .AddDefaultUI()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
 
 
 
 builder.Services.AddScoped<IImageService, ImageService>();
 
 builder.Services.AddScoped<ITdListService, BlogService>();
+
+builder.Services.AddScoped <IBlogPostService, BlogPostService>();
 
 builder.Services.AddMvc();
 

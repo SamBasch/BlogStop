@@ -27,15 +27,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.Updated)
             </th>
-@*            <th>
-                @Html.DisplayNameFor(model => model.Slug)
-            </th>*@
             <th>
+                @Html.DisplayNameFor(model => model.Slug)
+            </th>
+@*            <th>
                 @Html.DisplayNameFor(model => model.IsDeleted)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsPublished)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
@@ -56,7 +56,7 @@
                 @Html.DisplayFor(modelItem => item.Abstract)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Content)
+                @Html.Raw(item.Content)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Created)

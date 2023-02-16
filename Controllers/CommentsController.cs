@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlogStop.Data;
 using BlogStop.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlogStop.Controllers
 {
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+ 
+        
 
         public CommentsController(ApplicationDbContext context)
         {
             _context = context;
+       
+            
         }
 
         // GET: Comments
@@ -61,8 +66,17 @@ namespace BlogStop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Body,Created,Updated,UpdateReason,BlogPostId,AuthorId")] Comment comment)
         {
+
+      
+
+
+
             if (ModelState.IsValid)
             {
+
+    
+              
+
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

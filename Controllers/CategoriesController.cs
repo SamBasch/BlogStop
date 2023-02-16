@@ -8,25 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using BlogStop.Data;
 using BlogStop.Models;
 using BlogStop.Services.Interfaces;
+using BlogStop.Services.Intefaces;
 
 namespace BlogStop.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IBlogPostService _blogPostService;
         private readonly IImageService _imageService;
 
 
-        public CategoriesController(ApplicationDbContext context, IImageService imageService)
+        public CategoriesController(IBlogPostService blogPostService, IImageService imageService)
         {
-            _context = context;
-            _imageService = imageService;   
+          
+            _imageService = imageService; 
+            _blogPostService = blogPostService; 
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-                IEnumerable<Category> categories = await _context.Categories.Include(c => c.BlogPosts).ToListAsync();
+            IEnumerable<Category> categories = await _blogPostService.GetCategoriesAsync();
 
             return View(categories);    
         }
@@ -34,13 +36,14 @@ namespace BlogStop.Controllers
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Category category = await _blogPostService.GetCategoryAsync(id.Value);
+
+
             if (category == null)
             {
                 return NotFound();
@@ -75,8 +78,7 @@ namespace BlogStop.Controllers
                 }
 
 
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                await _blogPostService.AddCategoryAsync(category);  
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -85,12 +87,14 @@ namespace BlogStop.Controllers
         // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
+            Category category = await _blogPostService.GetCategoryAsync(id.Value);
+
+
             if (category == null)
             {
                 return NotFound();
@@ -122,12 +126,11 @@ namespace BlogStop.Controllers
                     }
 
 
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    await _blogPostService.UpdateCategoryAsync(category);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!await CategoryExists(category.Id))
                     {
                         return NotFound();
                     }
@@ -144,13 +147,12 @@ namespace BlogStop.Controllers
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Category category = await _blogPostService.GetCategoryAsync(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -162,25 +164,25 @@ namespace BlogStop.Controllers
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            if (_context.Categories == null)
+            if (id == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
+                return NotFound();
             }
-            var category = await _context.Categories.FindAsync(id);
+            Category category = await _blogPostService.GetCategoryAsync(id.Value);
             if (category != null)
             {
-                _context.Categories.Remove(category);
+                await _blogPostService.DeleteCategoryAsync(category);   
             }
             
-            await _context.SaveChangesAsync();
+          
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private async Task<bool> CategoryExists(int? id)
         {
-          return (_context.Categories?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (await _blogPostService.GetCategoriesAsync()).Any(b => b.Id == id);
         }
     }
 }

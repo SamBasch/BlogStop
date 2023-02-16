@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using BlogStop.Services;
 using BlogStop.Services.Interfaces;
 using System.Diagnostics;
+using BlogStop.Services.Intefaces;
 
 namespace BlogStop.Controllers
 {
@@ -18,63 +19,53 @@ namespace BlogStop.Controllers
     [Authorize(Roles = "Admin")]
     public class BlogPostsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        //private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
         private readonly ITdListService _blogService;
+        private readonly IBlogPostService _blogPostService;
 
 
         
-        public BlogPostsController(ApplicationDbContext context, IImageService imageService, ITdListService blogService)
+        public BlogPostsController( IImageService imageService, ITdListService blogService, IBlogPostService blogPostService)
         {
-            _context = context;
+            
             _imageService = imageService;
-            _blogService = blogService; 
+            _blogService = blogService;
+            _blogPostService = blogPostService;
         }
 
         // GET: BlogPosts
-        [AllowAnonymous]
-        public async Task<IActionResult> Index(int? categoryId, int? tagId)
-        {
+        //[AllowAnonymous]
+        //public async Task<IActionResult> Index(int? categoryId, int? tagId)
+        //{
 
 
-            IEnumerable<BlogPost> blogPosts = await _context.BlogPosts.Include(b => b.Comments).Include(b => b.Tags).Include(b => b.Category).ToListAsync();
+        //    //IEnumerable<BlogPost> blogPosts = await _context.BlogPosts.Include(b => b.Comments).Include(b => b.Tags).Include(b => b.Category).ToListAsync();
 
-            IEnumerable<Tag> tags = await _context.Tags.ToListAsync();
-
-            // if (categoryId == null)
-            //{
-
-            //    tdItems = await _context.ToDoItems.Where(t => t.AppUserId == userId && t.Completed == false).Include(t => t.Accessories).ToListAsync();
-
-
-            //}
-            //else
-            //{
-            //    tdItems = (await _context.Accessories.Include(a => a.ToDoItems).FirstOrDefaultAsync(a => a.AppUserId == userId && a.Id == accessoryId))!.ToDoItems.ToList();
-            //}
+        //    //IEnumerable<Tag> tags = await _context.Tags.ToListAsync();
 
 
 
-            //TODO: add int as 4th parameter
-            //ViewData["CategoryList"] = new SelectList(CategoriesController,"Id", "Name",)
+        //    //ViewData["TagList"] = new SelectList(tags, "Id", "Name", tagId);
 
 
-            ViewData["TagList"] = new SelectList(tags, "Id", "Name", tagId);
-            return View(blogPosts);
-        }
+        //   IEnumerable<BlogPost> blogPosts = await _blogPostService.GetBlogPosts();
+
+
+        //    return View(blogPosts);
+        //}
 
         // GET: BlogPosts/Details/5
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.BlogPosts == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var blogPost = await _context.BlogPosts
-                .Include(b => b.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            BlogPost blogPost = await _blogPostService.GetBlogPostAsync(id.Value);
+
             if (blogPost == null)
             {
                 return NotFound();
@@ -83,20 +74,38 @@ namespace BlogStop.Controllers
             return View(blogPost);
         }
 
+
+
+
+
+
+        public async Task<IActionResult> AdminPage()
+        {
+
+            IEnumerable<BlogPost> blogPosts = await _blogPostService.GetBlogPosts();
+            return View(blogPosts);
+        }
+
+
+
+
+
+
         // GET: BlogPosts/Create
         
         public async Task<IActionResult> Create()
         {
 
 
-            IEnumerable<Category> categoryList = await _context.Categories.ToListAsync();
-            IEnumerable<Tag> tagList = await _context.Tags.ToListAsync();
 
-            ViewData["CategoryList"] = new MultiSelectList(categoryList, "Id", "Name");
 
-            ViewData["TagList"] = new MultiSelectList(tagList, "Id", "Name");
+            IEnumerable<Tag> tags = await _blogPostService.GetTagsAsync();
 
-            return View();
+            ViewData["CategoryList"] = new SelectList(await _blogPostService.GetCategoriesAsync(), "Id", "Name") ;
+
+            ViewData["TagList"] = new MultiSelectList(tags, "Id", "Name");
+
+            return View(new BlogPost());
         }
 
         // POST: BlogPosts/Create
@@ -119,10 +128,9 @@ namespace BlogStop.Controllers
                     blogPost.ImageType = blogPost.Image.ContentType;
                 }
 
+                await _blogPostService.AddBlogPostAsync(blogPost);  
 
-
-                _context.Add(blogPost);
-                await _context.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
             //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", blogPost.CategoryId);
@@ -133,24 +141,19 @@ namespace BlogStop.Controllers
         
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.BlogPosts == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var blogPost = await _context.BlogPosts.Include(b => b.Tags).FirstOrDefaultAsync(b => b.Id == id);
-
-
-            IEnumerable<Category> categoryList = await _context.Categories.ToListAsync();
-
-            IEnumerable<Tag> tagList = await _context.Tags.ToListAsync();
+            BlogPost blogPost = await _blogPostService.GetBlogPostAsync(id.Value);
 
             IEnumerable<int> currentTags = blogPost!.Tags.Select(t => t.Id);
            
 
-            ViewData["CategoryList"] = new SelectList(categoryList, "Id", "Name", blogPost.CategoryId);
+            ViewData["CategoryList"] = new SelectList(await _blogPostService.GetCategoriesAsync(), "Id", "Name", blogPost.CategoryId);
 
-            ViewData["TagList"] = new MultiSelectList(tagList, "Id", "Name", currentTags);
+            ViewData["TagList"] = new MultiSelectList(await _blogPostService.GetTagsAsync(), "Id", "Name", currentTags);
 
 
             if (blogPost == null)
@@ -192,8 +195,7 @@ namespace BlogStop.Controllers
                     }
 
 
-                    _context.Update(blogPost);
-                    await _context.SaveChangesAsync();
+                        await _blogPostService.UpdateBlogPostAsync(blogPost);   
 
                     if (selected != null)
                     {
@@ -201,13 +203,13 @@ namespace BlogStop.Controllers
 
                         await _blogService.AddBlogPostToTagsAsync(selected, blogPost.Id);
 
-                        _context.Update(blogPost);
-                        await _context.SaveChangesAsync();
+                        await _blogPostService.UpdateBlogPostAsync(blogPost);
+                    
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BlogPostExists(blogPost.Id))
+                    if (!await BlogPostExists(blogPost.Id))
                     {
                         return NotFound();
                     }
@@ -226,16 +228,16 @@ namespace BlogStop.Controllers
         
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.BlogPosts == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
 
-      
-            var blogPost = await _context.BlogPosts
-                .Include(b => b.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
+
+            BlogPost blogPost = await _blogPostService.GetBlogPostAsync(id.Value);
+
+
             if (blogPost == null)
             {
                 return NotFound();
@@ -250,23 +252,27 @@ namespace BlogStop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            if (_context.BlogPosts == null)
+            if (id == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.BlogPosts'  is null.");
+                return NotFound();
             }
-            var blogPost = await _context.BlogPosts.FindAsync(id);
+
+
+
+            BlogPost blogPost = await _blogPostService.GetBlogPostAsync(id.Value);
+
             if (blogPost != null)
             {
-                _context.BlogPosts.Remove(blogPost);
+                await _blogPostService.DeleteBlogPostAsync(blogPost);
             }
             
-            await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BlogPostExists(int? id)
+        private async Task<bool> BlogPostExists(int? id)
         {
-          return (_context.BlogPosts?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (await _blogPostService.GetBlogPosts()).Any(b => b.Id == id);
         }
     }
 }
