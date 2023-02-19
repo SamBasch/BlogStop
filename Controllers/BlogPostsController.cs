@@ -12,6 +12,7 @@ using BlogStop.Services;
 using BlogStop.Services.Interfaces;
 using System.Diagnostics;
 using BlogStop.Services.Intefaces;
+using BlogStop.Helpers;
 
 namespace BlogStop.Controllers
 {
@@ -21,16 +22,14 @@ namespace BlogStop.Controllers
     {
         //private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
-        private readonly ITdListService _blogService;
         private readonly IBlogPostService _blogPostService;
 
 
         
-        public BlogPostsController( IImageService imageService, ITdListService blogService, IBlogPostService blogPostService)
+        public BlogPostsController( IImageService imageService, IBlogPostService blogPostService)
         {
             
             _imageService = imageService;
-            _blogService = blogService;
             _blogPostService = blogPostService;
         }
 
@@ -57,14 +56,14 @@ namespace BlogStop.Controllers
 
         // GET: BlogPosts/Details/5
         [AllowAnonymous]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? slug)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(slug))
             {
                 return NotFound();
             }
 
-            BlogPost blogPost = await _blogPostService.GetBlogPostAsync(id.Value);
+            BlogPost blogPost = await _blogPostService.GetBlogPostAsync(slug);
 
             if (blogPost == null)
             {
@@ -114,10 +113,28 @@ namespace BlogStop.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Abstract,Content,Created,Updated,Slug,IsDeleted,IsPublished,CategoryId,Image")] BlogPost blogPost, IEnumerable<int> selected)
+        public async Task<IActionResult> Create([Bind("Id,Title,Abstract,Content,Created,Updated,Slug,IsDeleted,IsPublished,CategoryId,Image")] BlogPost blogPost, IEnumerable<int> selected, string? stringTags)
         {
+
+
+
+            ModelState.Remove("Slug");
+
+
             if (ModelState.IsValid)
             {
+               
+
+                if (!await _blogPostService.ValidateSlugAsync(blogPost.Title!, blogPost.Id))
+                {
+                    ModelState.AddModelError("Title", "A similar Title or Slug is already in use.");
+
+                    ViewData["CategoryList"] = new SelectList(await _blogPostService.GetCategoriesAsync(), "Id", "Name");
+
+                    return View(blogPost);
+                }
+
+                blogPost.Slug = StringHelper.BlogSlug(blogPost.Title!);
 
 
                 blogPost.Created = DataUtility.GetPostGresDate(DateTime.UtcNow);
@@ -128,10 +145,18 @@ namespace BlogStop.Controllers
                     blogPost.ImageType = blogPost.Image.ContentType;
                 }
 
-                await _blogPostService.AddBlogPostAsync(blogPost);  
-
                 
-                return RedirectToAction(nameof(Index));
+
+                await _blogPostService.AddBlogPostAsync(blogPost);
+
+                if(!string.IsNullOrWhiteSpace(stringTags))
+                {
+
+                    await _blogPostService.AddTagsToBlogPostAsync(stringTags, blogPost.Id);
+                }
+
+
+                return RedirectToAction(nameof(AdminPage));
             }
             //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", blogPost.CategoryId);
             return View(blogPost);
@@ -153,7 +178,9 @@ namespace BlogStop.Controllers
 
             ViewData["CategoryList"] = new SelectList(await _blogPostService.GetCategoriesAsync(), "Id", "Name", blogPost.CategoryId);
 
-            ViewData["TagList"] = new MultiSelectList(await _blogPostService.GetTagsAsync(), "Id", "Name", currentTags);
+            IEnumerable<string> tagNames = blogPost.Tags.Select(t => t.Name!);
+
+            ViewData["Tags"] = string.Join(", ", tagNames);
 
 
             if (blogPost == null)
@@ -170,19 +197,31 @@ namespace BlogStop.Controllers
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Abstract,Content,Created,Updated,Slug,IsDeleted,IsPublished,CategoryId,Image")] BlogPost blogPost, IEnumerable<int> selected)
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Abstract,Content,Created,Updated,Slug,IsDeleted,IsPublished,CategoryId,Image")] BlogPost blogPost, string? stringTags)
         {
             if (id != blogPost.Id)
             {
                 return NotFound();
             }
 
+           
+
             if (ModelState.IsValid)
             {
                 try
                 {
 
-                   
+                    if (!await _blogPostService.ValidateSlugAsync(blogPost.Title!, blogPost.Id))
+                    {
+                        ModelState.AddModelError("Title", "A similar Title or Slug is already in use.");
+
+                        ViewData["CategoryList"] = new SelectList(await _blogPostService.GetCategoriesAsync(), "Id", "Name");
+
+                        return View(blogPost);
+                    }
+                    blogPost.Slug = StringHelper.BlogSlug(blogPost.Title!);
+
+
 
                     blogPost.Created = DataUtility.GetPostGresDate(blogPost.Created);
 
@@ -195,17 +234,21 @@ namespace BlogStop.Controllers
                     }
 
 
-                        await _blogPostService.UpdateBlogPostAsync(blogPost);   
+               
 
-                    if (selected != null)
+
+
+                    await _blogPostService.UpdateBlogPostAsync(blogPost);   
+
+                    await _blogPostService.RemoveAllBlogPostTagsAsync(blogPost.Id);
+
+                    if (!string.IsNullOrWhiteSpace(stringTags))
                     {
-                        await _blogService.RemoveAllBlogPostTagsAsync(blogPost.Id);
 
-                        await _blogService.AddBlogPostToTagsAsync(selected, blogPost.Id);
-
-                        await _blogPostService.UpdateBlogPostAsync(blogPost);
-                    
+                        await _blogPostService.AddTagsToBlogPostAsync(stringTags, blogPost.Id);
                     }
+
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -218,7 +261,7 @@ namespace BlogStop.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AdminPage));
             }
             //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", blogPost.CategoryId);
             return View(blogPost);
@@ -267,7 +310,7 @@ namespace BlogStop.Controllers
             }
             
             
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AdminPage));
         }
 
         private async Task<bool> BlogPostExists(int? id)

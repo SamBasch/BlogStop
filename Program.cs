@@ -23,7 +23,7 @@ builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.R
 
 builder.Services.AddScoped<IImageService, ImageService>();
 
-builder.Services.AddScoped<ITdListService, BlogService>();
+
 
 builder.Services.AddScoped <IBlogPostService, BlogPostService>();
 
@@ -53,6 +53,16 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+
+app.MapControllerRoute(
+
+
+    name: "custom",
+    pattern: "Content/{slug}",
+    defaults: new { controller = "BlogPosts", action = "Details" }
+
+    );
 
 app.MapControllerRoute(
     name: "default",

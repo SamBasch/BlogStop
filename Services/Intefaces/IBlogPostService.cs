@@ -15,6 +15,8 @@ namespace BlogStop.Services.Intefaces
 
         public Task<BlogPost> GetBlogPostAsync(int blogPostId);
 
+        public Task<BlogPost> GetBlogPostAsync(string blogSlug);
+
 
         public Task DeleteBlogPostAsync(BlogPost blogPost);
 
@@ -48,7 +50,34 @@ namespace BlogStop.Services.Intefaces
 
         #endregion
 
-        public Task<IEnumerable<Tag>>GetTagsAsync();
+        
+
+
+
+        //public Task RemoveAllBlogPostAsync(int blogPostId);
+
+        //public IEnumerable<BlogPost> Search(string serachString);
+
+        public Task<bool> ValidateSlugAsync(string title, int blogId);
+
+
+
+
+
+
+        public Task<IEnumerable<Tag>> GetTagsAsync();
+
+        public Task AddtBlogPostToTagAsync(int tagId, int blogPostId);
+
+        public Task AddBlogPostToTagsAsync(IEnumerable<int> tagIds, int blogPostId);
+
+        public Task<IEnumerable<Tag>> GetAppUserTagsAsync(string appUserId);
+
+        public Task<bool> IsBlogPostInTag(int tagId, int blogPostId);
+
+        public Task RemoveAllBlogPostTagsAsync(int blogPostId);
+
+        public Task AddTagsToBlogPostAsync(string stringTags, int blogPostId);
 
     }
 }

@@ -12378,6 +12378,39 @@ body.active-dark-mode .axil-footer-style-1 .footer-top .inner {
   border-bottom-color: #333333;
 }
 
+.ck-editor__editable_inline {
+    min-height: 600px;
+}
+
+.form-check-input {
+    position: relative !important;
+    opacity: 1 !important;
+    width: initial !important;
+    height: 1rem !important;
+    margin: initial !important;
+}
+
+
+.tagcloud > .disabledTag {
+    background-color: lightgray;
+    color: gray;
+    font-weight: bold
+}
+
+.tagcloud a:hover {
+    color: white !important;
+}
+
+.tagcloud a {
+    color: black;
+}
+
+.tagcloud > .disabledTag:hover {
+    background-color: lightgray;
+    color: darkgray !important;
+    border-color: lightgray;
+}
+
 @media only screen and (max-width: 575px) {
   body.active-dark-mode .axil-header .header-search .header-search-form .axil-search.form-group .search-button {
     background: #242424;
@@ -12390,3 +12423,7 @@ body.active-dark-mode .axil-footer-style-1 .footer-top .inner {
     color: #ffffff;
   }
 }
+
+
+
+

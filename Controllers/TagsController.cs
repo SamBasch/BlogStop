@@ -7,22 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlogStop.Data;
 using BlogStop.Models;
+using BlogStop.Services.Intefaces;
 
 namespace BlogStop.Controllers
 {
     public class TagsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBlogPostService _blogPostService; 
 
-        public TagsController(ApplicationDbContext context)
+        public TagsController(ApplicationDbContext context, IBlogPostService blogPostService)
         {
             _context = context;
+            _blogPostService = blogPostService;
         }
 
         // GET: Tags
         public async Task<IActionResult> Index()
         {
-             IEnumerable<Tag> tags = await _context.Tags.Include(t => t.BlogPosts).ToListAsync(); 
+            IEnumerable<Tag> tags = await _blogPostService.GetTagsAsync(); 
             
             return View(tags);  
         }

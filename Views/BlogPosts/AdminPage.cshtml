@@ -58,15 +58,15 @@
                                 </div>
                                 <div class="d-flex justify-content-end">
 
-                                    <a class="mx-3 btn btn-outline-info" asp-action="Edit" asp-route-id="@blogPost.Id">
+                                    <a class="mx-3 btn btn-outline-info" asp-action="Edit" asp-route-slug="@blogPost.Slug">
                                         <i class="fa fa-edit fa-2x"></i>
                                     </a>
 
-                                    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@blogPost.Id">
+                                    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-slug="@blogPost.Slug">
                                         <i class="fa fa-newspaper fa-2x" aria-hidden="true"></i>
                                     </a>
 
-                                    <a class="btn btn-outline-secondary"asp-controller="Comments" asp-action="Create" asp-route-id="@blogPost.Id">
+                                    <a class="btn btn-outline-secondary"asp-controller="Comments" asp-action="Create" asp-route-slug="@blogPost.Slug">
                                         <i class="fa fa-commenting"></i>
                                     </a>
 
