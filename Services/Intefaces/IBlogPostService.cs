@@ -1,4 +1,5 @@
 ﻿using BlogStop.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 
 namespace BlogStop.Services.Intefaces
@@ -78,6 +79,27 @@ namespace BlogStop.Services.Intefaces
         public Task RemoveAllBlogPostTagsAsync(int blogPostId);
 
         public Task AddTagsToBlogPostAsync(string stringTags, int blogPostId);
+
+        public Task CreateCommentAsync(Comment comment);
+
+        public IEnumerable<BlogPost> SearchBlogPosts(string? searchString);
+
+        public IEnumerable<BlogPost> GetBlogPostsByCategory(int? categoryId);
+
+        public Task<Tag> GetTagAsync(int tagId);
+
+        public IEnumerable<Comment> GetAllComments();
+
+        public Task<Comment> GetCommentAsync(int commentId);
+        public Task UpdateCommentAsync(Comment comment);
+
+        public Task DeleteCommentAsync(Comment comment);
+        
+
+
+
+
+
 
     }
 }

@@ -8,14 +8,11 @@
 
 
 
+<!-- End Mobile Menu Area  -->
+<!-- Start Post Single Wrapper  -->
 <div class="post-single-wrapper axil-section-gap bg-color-white">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4">
-                <!-- Start Sidebar Area  -->
-                <partial name="_Sidebar" />
-                <!-- End Sidebar Area  -->
-            </div>
             <div class="col-lg-8">
                 <!-- Start Banner Area -->
                 <div class="banner banner-single-post post-formate post-layout axil-section-gapBottom">
@@ -48,12 +45,12 @@
                                                     <h6 class="post-author-name">
                                                         <a class="hover-flip-item-wrapper" href="author.html">
                                                             <span class="hover-flip-item">
-                                                                <span data-text="Sam Baschnagel">Sam Baschnagel</span>
+                                                                <span data-text="Ismat Jahan">Ismat Jahan</span>
                                                             </span>
                                                         </a>
                                                     </h6>
                                                     <ul class="post-meta-list">
-                                                        <li>@Model.Created</li>
+                                                        <li>Feb 17, 2019</li>
                                                         <li>300k Views</li>
                                                     </ul>
                                                 </div>
@@ -80,7 +77,7 @@
                         @Model.Abstract
                     </p>
                     <figure class="wp-block-image">
-                          <img src="~/img/DefaultBlogImage.jpg" alt="Author Images">
+                        <img src="assets/images/post-single/post-single-05.jpg" alt="Post Images">
                         <figcaption>
                             caption for image
                         </figcaption>
@@ -104,7 +101,7 @@
                         </p>
                     </blockquote>
                     <figure class="wp-block-image">
-                        <img src="~/img/aldebaran-s-uXchDIKs4qI-unsplash.jpg" alt="Author Images">
+                        <img src="assets/images/post-single/post-single-05.jpg" alt="Post Images">
                         <figcaption>
                             caption for image
                         </figcaption>
@@ -117,9 +114,10 @@
                         @Html.Raw(Model.Content)
                     </p>
                     <figure class="wp-block-image">
-                        <img src="~/img/aldebaran-s-qtRF_RxCAo0-unsplash.jpg" alt="Author Images">
-                       
-                     </figcaption>
+                        <img src="assets/images/post-single/post-single-05.jpg" alt="Post Images">
+                        <figcaption>
+                            caption for image
+                        </figcaption>
                     </figure>
                     <h3>SubHeader </h3>
                     <p>
@@ -131,17 +129,16 @@
                     <p>
                         @Html.Raw(Model.Content)
                     </p>
-                    <p>Click <a asp-action="Index" asp-controller="Home">here</a> to return to blog posts.</p>
+                    <p>For more information on the apps and games, visit the <a href="#">App Store</a>.</p>
 
-
-                 <div class="tagcloud">
+                    <div class="tagcloud">
 
 
                         @foreach (Tag tag in Model.Tags)
                         {
-                                <a asp-controller="Tags" asp-action="Details" asp-route-id="@tag.Id">
+                            <a asp-controller="Tags" asp-action="Details" asp-route-id="@tag.Id">
                                 @tag.Name
-                                </a>
+                            </a>
                         }
 
 
@@ -159,112 +156,125 @@
                         </ul>
                     </div>
 
-                    <!-- Start Author  -->
-                    <!-- End Author  -->
 
+                    <!-- Start Comment Respond  -->
+                    <div class="comment-respond">
+                        <h4 class="title">Post a comment</h4>
+                        <form asp-controller="Comments" asp-action="Create" asp-route-slug="@Model.Slug" method="post">
+                            <p class="comment-notes">
+                                <span id="email-notes">
+                                    Your email address will not be
+                                    published.
+                                </span> Required fields are marked <span class="required">*</span>
+                            </p>
+                            <div class="row row--10">
 
-
-
-                    <!-- Start Comment Form Area  -->
-                    <div class="axil-comment-area">
-                        <div class="axil-total-comment-post">
-                            <div class="title">
-                                <h4 class="mb--0">30+ Comments</h4>
-                            </div>
-                            <div class="add-comment-button cerchio">
-                                <a class="axil-button button-rounded" href="post-details.html" tabindex="0"><span>Add Your Comment</span></a>
-                            </div>
-                        </div>
-
-                        <!-- Start Comment Respond  -->
-                        <div class="comment-respond">
-                            <h4 class="title">Post a comment</h4>
-                            <form asp-controller="Comments" asp-action="Create" asp-route-slug="@Model.Slug" method="post">
-
-                                <input type="hidden" asp-for="Id" name="BlogPostId" />
-                                <input name="BlogPostId" value="@Model.Id" type="hidden" />
-                                <p class="comment-notes">
-                                    <span id="email-notes">
-                                        Your email address will not be
-                                        published.
-                                    </span> Required fields are marked <span class="required">*</span>
-                                </p>
-                                <div class="row row--10">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label for="Body">Leave a Reply</label>
-                                            <textarea id="message" name="Body"></textarea>
-                                        </div>
-                                    </div>
-
-  
-                                    <div class="col-lg-12">
-                                        <div class="form-submit cerchio">
-                                            <input name="submit" type="submit" id="submit" class="axil-button button-rounded" value="Post Comment">
-                                        </div>
+                                <div class="col-lg-12">
+                                    <div class="form-submit cerchio">
+                                        <input name="submit" type="submit" id="submit" class="axil-button button-rounded" value="Post Comment">
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                        <!-- End Comment Respond  -->
-                        <!-- Start Comment Area  -->
-                        <div class="axil-comment-area">
-                            <h4 class="title">@Model.Comments.Count Comment(s)</h4>
-                            <ul class="comment-list">
-                                <!-- Start Single Comment  -->
-                                @foreach (var comment in Model.Comments)
-                                {
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img src="assets/images/post-images/author/author-b2.png" alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                            <span class="hover-flip-item">
-                                                                <span data-text="@comment.Author!.FullName">@comment.Author!.FullName</span>
-                                                            </span>
-                                                        </a>
-                                                    </h6>
-                                                    <div class="comment-meta">
-                                                        <div class="time-spent">@Model.Created.ToString("MMM dd, yyyy")</div>
-                                                        <div class="reply-edit">
-                                                            <div class="reply">
-                                                                <a class="comment-reply-link hover-flip-item-wrapper" href="#">
-                                                                    <span class="hover-flip-item">
-                                                                        <span data-text="Reply">Reply</span>
-                                                                    </span>
-                                                                </a>
-                                                            </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- End Comment Respond  -->
+                    <!-- Start Comment Area  -->
+                    <div class="axil-comment-area">
+                        <h4 class="title">@Model.Comments.Count Comment(s)</h4>
+                        <ul class="comment-list">
+                            <!-- Start Single Comment  -->
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <li class="comment">
+                                    <div class="comment-body">
+                                        <div class="single-comment">
+                                            <div class="comment-img">
+                                                <img src="assets/images/post-images/author/author-b2.png" alt="Author Images">
+                                            </div>
+                                            <div class="comment-inner">
+                                                <h6 class="commenter">
+                                                    <a class="hover-flip-item-wrapper" href="#">
+                                                        <span class="hover-flip-item">
+                                                            <span data-text="@comment.Author!.FullName">@comment.Author!.FullName</span>
+                                                        </span>
+                                                    </a>
+                                                </h6>
+                                                <div class="comment-meta">
+                                                    <div class="time-spent">Nov 23, 2018 at 12:23 pm</div>
+                                                    <div class="reply-edit">
+                                                        <div class="reply">
+                                                            <a class="comment-reply-link hover-flip-item-wrapper" href="#">
+                                                                <span class="hover-flip-item">
+                                                                    <span data-text="Reply">Reply</span>
+                                                                </span>
+                                                            </a>
                                                         </div>
                                                     </div>
-                                                    <div class="comment-text">
-                                                        <p class="b2">
-                                                            @comment.Body
-                                                        </p>
-                                                    </div>
+                                                </div>
+                                                <div class="comment-text">
+                                                    <p class="b2">
+                                                        @comment.Body
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
-                                               
-                                    </li>
-                                }
-                                <!-- End Single Comment  -->
+                                    </div>
+                                    @*            <ul class="children">
                                 <!-- Start Single Comment  -->
- 
+                                <li class="comment">
+                                <div class="comment-body">
+                                <div class="single-comment">
+                                <div class="comment-img">
+                                <img src="assets/images/post-images/author/author-b3.png" alt="Author Images">
+                                </div>
+                                <div class="comment-inner">
+                                <h6 class="commenter">
+                                <a class="hover-flip-item-wrapper" href="#">
+                                <span class="hover-flip-item">
+                                <span data-text="Rahabi Khan">Rahabi Khan</span>
+                                </span>
+                                </a>
+                                </h6>
+                                <div class="comment-meta">
+                                <div class="time-spent">
+                                Nov 23, 2018 at 12:23 pm
+                                </div>
+                                <div class="reply-edit">
+                                <div class="reply">
+                                <a class="comment-reply-link hover-flip-item-wrapper" href="#">
+                                <span class="hover-flip-item">
+                                <span data-text="Reply">Reply</span>
+                                </span>
+                                </a>
+                                </div>
+                                </div>
+                                </div>
+                                <div class="comment-text">
+                                <p class="b2">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse lobortis cursus lacinia. Vestibulum vitae leo id diam pellentesque ornare.</p>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
+                                </li>
                                 <!-- End Single Comment  -->
-                            </ul>
-                        </div>
-                        <!-- End Comment Area  -->
+                                </ul>*@
+                                </li>
+                            }
+
+                            <!-- End Single Comment  -->
+                            <!-- Start Single Comment  -->
+                            <!-- End Single Comment  -->
+                        </ul>
                     </div>
-                    <!-- End Comment Form Area  -->
+                    <!-- End Comment Area  -->
                 </div>
+                <!-- End Comment Form Area  -->
             </div>
         </div>
+
     </div>
 </div>
+
 <!-- End Post Single Wrapper  -->
 <!-- Start More Stories Area  -->
 <div class="axil-more-stories-area axil-section-gap bg-color-grey">
@@ -441,6 +451,25 @@
     </div>
 </div>
 <!-- End Instagram Area  -->
+<!-- Start Back To Top  -->
+<a id="backto-top"></a>
+<!-- End Back To Top  -->
+<!-- JS
+============================================ -->
+<!-- Modernizer JS -->
+<script src="assets/js/vendor/modernizr.min.js"></script>
+<!-- jQuery JS -->
+<script src="assets/js/vendor/jquery.js"></script>
+<!-- Bootstrap JS -->
+<script src="assets/js/vendor/bootstrap.min.js"></script>
+<script src="assets/js/vendor/slick.min.js"></script>
+<script src="assets/js/vendor/tweenmax.min.js"></script>
+<script src="assets/js/vendor/js.cookie.js"></script>
+<script src="assets/js/vendor/jquery.style.switcher.js"></script>
+
+
+<!-- Main JS -->
+<script src="assets/js/main.js"></script>
 
 
 <div>

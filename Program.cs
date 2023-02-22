@@ -5,6 +5,9 @@ using BlogStop.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BlogStop.Services.Intefaces;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,13 +26,46 @@ builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.R
 
 builder.Services.AddScoped<IImageService, ImageService>();
 
+builder.Services.AddScoped<IEmailSender, EmailService>();
 
 
 builder.Services.AddScoped <IBlogPostService, BlogPostService>();
 
 builder.Services.AddMvc();
 
+
+//add API
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Astra Blog API",
+        Version = "v1",
+        Description = "Serve up Blog Data using .Net 6 Apis",
+        Contact = new OpenApiContact
+        {
+            Name = "S.Baschnagel",
+            Email = "baschnagelsam@gmail.com",
+            //Url = new Uri("https://www.linkedin.com/in/director-raynor/")
+        }
+    });
+    var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
+});
+
+
+builder.Services.AddCors(obj =>
+{
+    obj.AddPolicy("DefaultPolicy",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
+
 var app = builder.Build();
+
+app.UseCors("DefaultPolicy");
 
 var scope = app.Services.CreateScope();
 
@@ -46,6 +82,16 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+//Add Swagger
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PublicAPI v1");
+    c.InjectStylesheet("/css/swagger.css");
+    c.InjectJavascript("/js/swagger.js");
+    c.DocumentTitle = "BlogStop Blog Public API";
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

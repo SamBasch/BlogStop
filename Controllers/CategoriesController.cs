@@ -9,6 +9,8 @@ using BlogStop.Data;
 using BlogStop.Models;
 using BlogStop.Services.Interfaces;
 using BlogStop.Services.Intefaces;
+using X.PagedList;
+using BlogStop.Models.ViewModels;
 
 namespace BlogStop.Controllers
 {
@@ -34,22 +36,33 @@ namespace BlogStop.Controllers
         }
 
         // GET: Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? pageNum)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
+
             Category category = await _blogPostService.GetCategoryAsync(id.Value);
 
+            
+            int page = pageNum ?? 1;
 
-            if (category == null)
-            {
-                return NotFound();
-            }
+            ViewData["Page"] = page;
+
+
+
+
+
+
 
             return View(category);
+
+
+            
+
+            
         }
 
         // GET: Categories/Create

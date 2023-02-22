@@ -4,6 +4,7 @@ using BlogStop.Services.Intefaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace BlogStop.Controllers
 {
@@ -21,15 +22,40 @@ namespace BlogStop.Controllers
 
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNum)
         {
 
-            //IEnumerable<BlogPost> blogPosts = await _context.BlogPosts.Include(b => b.Category).Where(b => b.IsPublished == true && b.IsDeleted == false).ToListAsync();
 
-            IEnumerable<BlogPost> blogPosts = await _blogPostService.GetRecentBlogPosts();
+            int pageSize = 3;
+            int page = pageNum ?? 1;
+
+
+
+
+
+            IPagedList<BlogPost> blogPosts = (await _blogPostService.GetRecentBlogPosts()).ToPagedList(page, pageSize);
 
 
             return View(blogPosts);
+        }
+
+
+
+        public IActionResult SearchIndex(string? searchString, int? pageNum) 
+        {
+
+
+            int pageSize = 5;
+            int page = pageNum ?? 1;
+
+
+
+
+
+            IPagedList<BlogPost> blogPosts = ( _blogPostService.SearchBlogPosts(searchString)).ToPagedList(page, pageSize);
+
+            return View(nameof(Index), blogPosts);
+
         }
 
         public IActionResult Privacy()

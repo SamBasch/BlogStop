@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BlogStop.Models.BlogPost>
+﻿
 @using BlogStop.Enums;
 @using BlogStop.Services.Intefaces
 @using BlogStop.Services.Interfaces
@@ -10,8 +10,6 @@
 @{
     IEnumerable<Category> categories = (await _blogPostService.GetCategoriesAsync()).Take(4);
     IEnumerable<BlogPost> popularPosts = (await _blogPostService.GetPopularBlogPosts()).Take(3);
-    //IEnumerable<BlogPost> popularPosts = (await _blogPostService.GetPopularBlogPosts()).Take(3);
-
 
 }
 
@@ -29,7 +27,7 @@
             {
 
                 <li class="cat-item">
-                    <a href="#" class="inner">
+                    <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.Id" class="inner">
                         <div class="thumbnail">
                             <img src="@_ImageService.ConvertByteArrayToFile(category.ImageData!, category.ImageType!, (int)DefaultImage.CategoryImage)" alt="">
                         </div>
@@ -48,10 +46,10 @@
     <!-- Start Single Widget  -->
     <div class="axil-single-widget widget widget_search mb--30">
         <h5 class="widget-title">Search</h5>
-        <form action="#">
+        <form asp-action="SearchIndex" asp-controller="Home" method="post">
             <div class="axil-search form-group">
                 <button type="submit" class="search-button"><i class="fal fa-search"></i></button>
-                <input type="text" class="form-control" placeholder="Search">
+                <input type="text" class="form-control" placeholder="Search" name="searchString">
             </div>
         </form>
     </div>

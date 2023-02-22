@@ -8,27 +8,35 @@ using Microsoft.EntityFrameworkCore;
 using BlogStop.Data;
 using BlogStop.Models;
 using Microsoft.AspNetCore.Identity;
+using BlogStop.Services.Intefaces;
+using BlogStop.Services;
 
 namespace BlogStop.Controllers
 {
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
- 
-        
+        private readonly UserManager<BlogUser> _userManager;
+        private readonly IBlogPostService _blogPostService; 
 
-        public CommentsController(ApplicationDbContext context)
+
+
+        public CommentsController(ApplicationDbContext context, UserManager<BlogUser> userManager, IBlogPostService blogPostService)
         {
             _context = context;
+            _userManager = userManager;
+            _blogPostService = blogPostService;
+
        
             
         }
 
         // GET: Comments
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Comments.Include(c => c.Author).Include(c => c.BlogPost);
-            return View(await applicationDbContext.ToListAsync());
+            IEnumerable<Comment> comments =  _blogPostService.GetAllComments();
+
+            return View(comments);
         }
 
         // GET: Comments/Details/5
@@ -39,10 +47,10 @@ namespace BlogStop.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Comments
-                .Include(c => c.Author)
-                .Include(c => c.BlogPost)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Comment comment = await _blogPostService.GetCommentAsync(id.Value);
+
+
+
             if (comment == null)
             {
                 return NotFound();
@@ -54,8 +62,7 @@ namespace BlogStop.Controllers
         // GET: Comments/Create
         public IActionResult Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content");
+           
             return View();
         }
 
@@ -64,26 +71,31 @@ namespace BlogStop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Body,Created,Updated,UpdateReason,BlogPostId,AuthorId")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,Body,Created,Updated,UpdateReason,BlogPostId,AuthorId")] Comment comment, string? Slug)
         {
 
-      
+           
 
+
+            ModelState.Remove("AuthorId");
+            
+            
 
 
             if (ModelState.IsValid)
             {
+                
+                comment.AuthorId = _userManager.GetUserId(User);
 
-    
-              
+              comment.Created = DataUtility.GetPostGresDate(DateTime.UtcNow);
 
-                _context.Add(comment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                await _blogPostService.CreateCommentAsync(comment);
+
+                return RedirectToAction("Details", "BlogPosts", new { Slug });
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-            ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
-            return View(comment);
+        
+            return View(comment); 
         }
 
         // GET: Comments/Edit/5
@@ -94,13 +106,14 @@ namespace BlogStop.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Comments.FindAsync(id);
+            Comment comment = await _blogPostService.GetCommentAsync(id.Value);
+
             if (comment == null)
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-            ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
+            //ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
+            //ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
             return View(comment);
         }
 
@@ -120,8 +133,7 @@ namespace BlogStop.Controllers
             {
                 try
                 {
-                    _context.Update(comment);
-                    await _context.SaveChangesAsync();
+                        await _blogPostService.UpdateCommentAsync(comment); 
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -136,8 +148,8 @@ namespace BlogStop.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-            ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
+            //ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
+            //ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
             return View(comment);
         }
 
@@ -149,10 +161,9 @@ namespace BlogStop.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Comments
-                .Include(c => c.Author)
-                .Include(c => c.BlogPost)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Comment comment = await _blogPostService.GetCommentAsync(id.Value);
+
+
             if (comment == null)
             {
                 return NotFound();
@@ -164,19 +175,20 @@ namespace BlogStop.Controllers
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            if (_context.Comments == null)
+            if(id == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Comments'  is null.");
+                return NotFound();
             }
-            var comment = await _context.Comments.FindAsync(id);
+
+            Comment comment = await _blogPostService.GetCommentAsync(id.Value);
             if (comment != null)
             {
-                _context.Comments.Remove(comment);
+                 await _blogPostService.DeleteCommentAsync(comment);   
             }
             
-            await _context.SaveChangesAsync();
+          
             return RedirectToAction(nameof(Index));
         }
 

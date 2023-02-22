@@ -1,24 +1,114 @@
-﻿@model BlogStop.Models.Tag
+﻿@model Tag
+@using BlogStop.Services.Interfaces;
+@using Microsoft.AspNetCore.Identity;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@using X.PagedList;
+@inject SignInManager<BlogUser> SignInManager
+@inject IImageService ImageService
 
 @{
-    ViewData["Title"] = "Details";
+    int pageSize = 3;
+    int pageNum = ViewBag.Page;
+    IPagedList<BlogPost> pageOfPosts = Model.BlogPosts.Where(b => b.IsPublished == true && b.IsDeleted == false).ToPagedList(pageNum, pageSize);
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Tag</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
+
+@*<partial name="_CategoryArea" model="@Model" />*@
+
+
+
+<div class="axil-author-area axil-author-banner bg-color-grey">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="about-author">
+                    <div class="media">
+                        <div class="thumbnail">
+                            <a href="#">
+                                <img src="~/assets/images/post-images/author/author-b1.png" alt="Author Images">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <div class="author-info">
+                                <h1 class="title"><a href="#">@Model.Name</a></h1>
+
+                            </div>
+                            <div class="content">
+                                <p class="b1 description">@Model.Name</p>
+                                <ul class="social-share-transparent size-md">
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="far fa-envelope"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+<div class="axil-post-list-area axil-section-gap bg-color-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-title">
+                    <h2 class="title mb--40">Articles in @Model.Name Category</h2>
+                </div>
+            </div>
+            <div class="col-lg-8 col-xl-8">
+
+                @foreach (BlogPost blogPost in pageOfPosts)
+                {
+
+                    <partial name="_BlogCard" model="@blogPost" />
+
+                }
+
+
+
+                <div>
+                    <div>
+                        Page @(pageOfPosts.PageCount < pageOfPosts.PageNumber ? 0 : pageOfPosts.PageNumber) of @pageOfPosts.PageCount
+                    </div>
+
+                    @Html.PagedListPager(pageOfPosts, pageNum => Url.Action("Details", new { id = Model.Id, pageNum = pageNum }),
+                    new PagedListRenderOptions{
+                    LiElementClasses = new string[] {"my-page-item"},
+                    PageClasses = new string[] {"my-page-link"}
+                    }
+                    )
+                </div>
+
+
+
+            </div>
+            <div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">
+
+
+                <partial name="_Sidebar" />
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@*<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="AdminPage">Back to List</a>
+</div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@

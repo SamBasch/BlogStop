@@ -1,5 +1,4 @@
 ﻿using BlogStop.Services.Interfaces;
-using Humanizer.Bytes;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using System.Drawing.Text;
 
@@ -12,6 +11,8 @@ namespace BlogStop.Services
         private readonly string _defaultUserImage = "/img/DefaultUserImage.png";
         private readonly string _defaultBlogImage = "/img/DefaultBlogImage.jpg";
         private readonly string _defaultCategoryImage = "/img/DefaultCategoryImage.jpg";
+        private readonly string _defaultAuthorImage = "/img/DefaultAuthorImage.jpeg";
+      
 
 
         public string ConvertByteArrayToFile(byte[] fileData, string extension, int defaultImage)
@@ -26,7 +27,8 @@ namespace BlogStop.Services
 
                     case 1: return _defaultUserImage;
                     case 2: return _defaultBlogImage;
-                    case 3: return _defaultCategoryImage;   
+                    case 3: return _defaultCategoryImage;
+                    case 4: return _defaultAuthorImage;
 
 
                 }

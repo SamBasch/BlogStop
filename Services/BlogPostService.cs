@@ -360,7 +360,7 @@ namespace BlogStop.Services
             try
             {
 
-                BlogPost? blogPost = await _context.BlogPosts.Include(b => b.Category).Include(b => b.Tags).Include(b => b.Comments).FirstOrDefaultAsync(b => b.Slug == blogSlug);
+                BlogPost? blogPost = await _context.BlogPosts.Include(b => b.Category).Include(b => b.Tags).Include(b => b.Comments).ThenInclude(c => c.Author).FirstOrDefaultAsync(b => b.Slug == blogSlug);
 
                 return blogPost!;
             }
@@ -422,6 +422,14 @@ namespace BlogStop.Services
 
                 foreach (string tagName in stringTags.Split(","))
                 {
+
+
+
+                    if (string.IsNullOrWhiteSpace(tagName.Trim()))
+                    {
+                        continue;   
+                    }
+
                     Tag? tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name.Trim().ToLower() == tagName.Trim().ToLower());
 
                     if (tag != null)
@@ -430,6 +438,8 @@ namespace BlogStop.Services
                     }
                     else
                     {
+
+
 
                         Tag newTag = new Tag() { Name = tagName.Trim() };
 
@@ -497,5 +507,193 @@ namespace BlogStop.Services
             }
      
         }
+
+        public async Task CreateCommentAsync(Comment comment)
+        {
+
+            try
+            {
+
+
+                
+
+                await _context.AddAsync(comment);
+                await _context.SaveChangesAsync();
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+
+        public Task AddCommentToBlogPost(int tagId, int blogPostId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<BlogPost> SearchBlogPosts(string? searchString)
+        {
+            try
+            {
+                IEnumerable<BlogPost> blogPosts = new List<BlogPost>();
+
+                if(string.IsNullOrEmpty(searchString))
+                {
+                    return blogPosts;
+                } else
+                {
+                    searchString = searchString.Trim().ToLower();
+
+                    blogPosts = _context.BlogPosts.Where(b => b.Title!.ToLower().Contains(searchString) ||
+                                                        b.Abstract!.ToLower().Contains(searchString) ||
+                                                        b.Content!.ToLower().Contains(searchString) ||
+                                                        b.Category!.Name!.ToLower().Contains(searchString) ||
+                                                        b.Comments.Any(c => c.Body!.ToLower().Contains(searchString) ||
+                                                                       c.Author!.FirstName!.ToLower().Contains(searchString) ||
+                                                                       c.Author!.LastName!.ToLower().Contains(searchString)) ||
+                                                        b.Tags.Any(t => t.Name!.ToLower().Contains(searchString)))
+                                                   .Include(b => b.Comments)
+                                                           .ThenInclude(c => c.Author)
+                                                   .Include(b => b.Category)
+                                                   .Include(b => b.Tags)
+                                                   .Where(b => b.IsPublished == true && b.IsDeleted == false)
+                                                   .AsNoTracking()
+                                                   .OrderByDescending(b => b.Created)
+                                                   .AsEnumerable();
+
+                    return blogPosts;
+
+                                                                       
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public  IEnumerable<BlogPost> GetBlogPostsByCategory(int? categoryId)
+        {
+            try
+            {
+                IEnumerable<BlogPost> blogPosts = _context.BlogPosts.Include(b => b.Tags).Include(b => b.Comments).Include(b => b.Category).Where(b => b.CategoryId == categoryId);
+
+                return blogPosts;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+           
+
+
+        }
+
+        public async Task<Tag> GetTagAsync(int tagId)
+        {
+
+            try
+            {
+
+                Tag? tag = await _context.Tags.Include(c => c.BlogPosts).FirstOrDefaultAsync(c => c.Id == tagId);
+                return tag!;
+
+
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        public IEnumerable<Comment> GetAllComments()
+        {
+
+            try
+            {
+                IEnumerable<Comment> comments =  _context.Comments.Include(c => c.Author).Include(c => c.BlogPost);
+
+                return comments;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+
+
+
+
+        }
+
+        public async Task<Comment> GetCommentAsync(int commentId)
+        {
+
+
+            try
+            {
+                Comment? comment = await _context.Comments.Include(c => c.BlogPost).Include(c => c.Author).FirstOrDefaultAsync(c => c.Id == commentId);
+
+                return comment!;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            
+        
+
+        }
+
+
+        public async Task UpdateCommentAsync(Comment comment)
+        {
+            try
+            {
+                _context.Update(comment);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+
+        }
+
+        public async Task DeleteCommentAsync(Comment comment)
+        {
+            try
+            {
+
+                _context.Remove(comment);
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+      
     }
 }

@@ -1,8 +1,11 @@
 ﻿
-@model IEnumerable<BlogStop.Models.BlogPost>
+@model IPagedList<BlogStop.Models.BlogPost>
 @using BlogStop.Enums;
 @using BlogStop.Services.Intefaces
 @using BlogStop.Services.Interfaces
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
 @inject IImageService _ImageService
 @inject IBlogPostService _blogPostService
 
@@ -36,6 +39,20 @@
 
                 }
 
+
+
+                <div>
+                    <div>
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    </div>
+
+                    @Html.PagedListPager(Model, pageNum => Url.Action("Index", new { pageNum }),
+                    new PagedListRenderOptions{
+                        LiElementClasses = new string[] {"my-page-item"},
+                        PageClasses = new string[] {"my-page-link"}
+                    }
+                    )
+                </div>
 
 
 

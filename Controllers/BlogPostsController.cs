@@ -63,6 +63,11 @@ namespace BlogStop.Controllers
                 return NotFound();
             }
 
+
+            Comment comment = new Comment();
+
+            
+
             BlogPost blogPost = await _blogPostService.GetBlogPostAsync(slug);
 
             if (blogPost == null)
@@ -113,10 +118,10 @@ namespace BlogStop.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Abstract,Content,Created,Updated,Slug,IsDeleted,IsPublished,CategoryId,Image")] BlogPost blogPost, IEnumerable<int> selected, string? stringTags)
+        public async Task<IActionResult> Create([Bind("Id,Title,Abstract,Content,Created,Updated,Slug,IsDeleted,IsPublished,CategoryId,Image")] BlogPost blogPost, string? stringTags)
         {
 
-
+            
 
             ModelState.Remove("Slug");
 

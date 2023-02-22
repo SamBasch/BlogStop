@@ -31,15 +31,19 @@ namespace BlogStop.Controllers
         }
 
         // GET: Tags/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? pageNum)
         {
             if (id == null || _context.Tags == null)
             {
                 return NotFound();
             }
 
-            var tag = await _context.Tags
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Tag tag = await _blogPostService.GetTagAsync(id.Value);
+
+            int page = pageNum ?? 1;
+
+            ViewData["Page"] = page;
+
             if (tag == null)
             {
                 return NotFound();

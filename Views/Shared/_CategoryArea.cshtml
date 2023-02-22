@@ -1,4 +1,7 @@
-﻿<div class="axil-author-area axil-author-banner bg-color-grey">
+﻿@*
+@model BlogStop.Models.ViewModels.CategoryBlogPostViewModel<>
+
+<div class="axil-author-area axil-author-banner bg-color-grey">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -6,13 +9,13 @@
                     <div class="media">
                         <div class="thumbnail">
                             <a href="#">
-                                <img src="~/img/AuthorImage_small.jpg" alt="Author Images">
+                                <img src="~/assets/images/post-images/author/author-b1.png" alt="Author Images">
                             </a>
                         </div>
                         <div class="media-body">
                             <div class="author-info">
-                                <h1 class="title"><a href="#">Sam Baschnagel</a></h1>
-                                <span class="b3 subtitle">Jr. Software Developer</span>
+                                <h1 class="title"><a href="#">@Category.Name</a></h1>
+                     
                             </div>
                             <div class="content">
                                 <p class="b1 description">At 40+ years old, my favorite compliment is being told that I look like my mom. Seeing myself in her image, like this daughter up top, makes me so proud of how far I’ve come, and so thankful for where I come from</p>
@@ -30,4 +33,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
