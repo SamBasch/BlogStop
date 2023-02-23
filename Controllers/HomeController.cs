@@ -41,6 +41,18 @@ namespace BlogStop.Controllers
 
 
 
+        public async Task<IActionResult> ContactMe()
+        {
+
+
+          
+
+
+            return View();
+        }
+
+
+
         public IActionResult SearchIndex(string? searchString, int? pageNum) 
         {
 

@@ -166,6 +166,10 @@
 
 
                     <!-- Start Comment Form Area  -->
+                    @if (User.IsInRole("Admin"))
+                    {
+                        
+                    }
                     <div class="axil-comment-area">
                         <div class="axil-total-comment-post">
                             <div class="title">
@@ -175,9 +179,9 @@
                                 <a class="axil-button button-rounded" href="post-details.html" tabindex="0"><span>Add Your Comment</span></a>
                             </div>
                         </div>
-
-                        <!-- Start Comment Respond  -->
-                        <div class="comment-respond">
+                        @if (User.IsInRole("Admin"))
+                        {
+                                                    <div class="comment-respond">
                             <h4 class="title">Post a comment</h4>
                             <form asp-controller="Comments" asp-action="Create" asp-route-slug="@Model.Slug" method="post">
 
@@ -206,6 +210,9 @@
                                 </div>
                             </form>
                         </div>
+                        }
+                        <!-- Start Comment Respond  -->
+
                         <!-- End Comment Respond  -->
                         <!-- Start Comment Area  -->
                         <div class="axil-comment-area">
