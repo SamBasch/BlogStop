@@ -41,6 +41,44 @@ namespace BlogStop.Controllers
 
 
 
+        public async Task<IActionResult> AllPosts(int? pageNum)
+        {
+
+
+            int pageSize = 3;
+            int page = pageNum ?? 1;
+
+
+
+
+
+            IPagedList<BlogPost> blogPosts = (await _blogPostService.GetBlogPosts()).ToPagedList(page, pageSize);
+
+
+            return View(blogPosts);
+        }
+
+
+
+        public async Task<IActionResult> PopularPosts(int? pageNum)
+        {
+
+
+            int pageSize = 3;
+            int page = pageNum ?? 1;
+
+
+
+
+
+            IPagedList<BlogPost> blogPosts = (await _blogPostService.GetPopularBlogPosts()).ToPagedList(page, pageSize);
+
+
+            return View(blogPosts);
+        }
+
+
+
         public async Task<IActionResult> ContactMe()
         {
 

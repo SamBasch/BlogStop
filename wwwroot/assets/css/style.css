@@ -138,6 +138,16 @@ video {
   display: inline-block;
 }
 
+.thumbnail img {
+    height: 105px;
+    width: 105px;
+}
+
+.cat-item .thumbnail img {
+    height: 50px;
+    width: 50px;
+}
+
 audio:not([controls]) {
   display: none;
   height: 0;

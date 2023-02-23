@@ -10,7 +10,7 @@ namespace BlogStop.Services
 
         private readonly string _defaultUserImage = "/img/DefaultUserImage.png";
         private readonly string _defaultBlogImage = "/img/DefaultBlogImage.jpg";
-        private readonly string _defaultCategoryImage = "/img/DefaultCategoryImage.jpg";
+        private readonly string _defaultCategoryImage = "/img/DefaultCategoryImage.png";
         private readonly string _defaultAuthorImage = "/img/DefaultAuthorImage.jpeg";
       
 
