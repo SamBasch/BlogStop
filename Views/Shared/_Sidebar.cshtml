@@ -1,5 +1,4 @@
-﻿
-@using BlogStop.Enums;
+﻿@using BlogStop.Enums;
 @using BlogStop.Services.Intefaces
 @using BlogStop.Services.Interfaces
 @inject IImageService _ImageService
@@ -78,7 +77,15 @@
                         <div class="post-meta">
                             <ul class="post-meta-list">
                                 <li> @blogPost.Created.ToString("MMM dd, yyyy")</li>
-                                <li>300k Views</li>
+                                @if (Model.Comments.Count == 1)
+                                {
+                                    <li class="title">1 Comment</li>
+                                }
+                                else
+                                {
+                                    <li class="title">@Model.Comments.Count Comments</li>
+                                }
+                
                             </ul>
                         </div>
                     </div>
@@ -107,10 +114,10 @@
     </div>
     <!-- End Single Widget  -->
     <!-- Start Single Widget  -->
-@*    <div class="axil-single-widget widget widget_instagram mb--30">
-        <h5 class="widget-title">Instagram</h5>
-        <!-- Start Post List  -->
-        <!-- End Post List  -->
+    @*    <div class="axil-single-widget widget widget_instagram mb--30">
+    <h5 class="widget-title">Instagram</h5>
+    <!-- Start Post List  -->
+    <!-- End Post List  -->
     </div>*@
     <!-- End Single Widget  -->
 </div>
