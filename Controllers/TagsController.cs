@@ -8,9 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using BlogStop.Data;
 using BlogStop.Models;
 using BlogStop.Services.Intefaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace BlogStop.Controllers
 {
+
+    [Authorize(Roles = "Admin")]
     public class TagsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -31,6 +35,8 @@ namespace BlogStop.Controllers
         }
 
         // GET: Tags/Details/5
+
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id, int? pageNum)
         {
             if (id == null || _context.Tags == null)

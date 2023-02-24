@@ -11,9 +11,14 @@ using BlogStop.Services.Interfaces;
 using BlogStop.Services.Intefaces;
 using X.PagedList;
 using BlogStop.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace BlogStop.Controllers
 {
+
+
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly IBlogPostService _blogPostService;
@@ -35,6 +40,8 @@ namespace BlogStop.Controllers
             return View(categories);    
         }
 
+
+        [AllowAnonymous]
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id, int? pageNum)
         {

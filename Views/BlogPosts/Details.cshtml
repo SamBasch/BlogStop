@@ -84,47 +84,47 @@
                     <p class="has-medium-font-size">
                         @Model.Abstract
                     </p>
-@*                    <figure class="wp-block-image">
-                          <img src="~/img/DefaultBlogImage.jpg" alt="Author Images">
-                        <figcaption>
-                            caption for image
-                        </figcaption>
+                    @*                    <figure class="wp-block-image">
+                    <img src="~/img/DefaultBlogImage.jpg" alt="Author Images">
+                    <figcaption>
+                    caption for image
+                    </figcaption>
                     </figure>*@
                     <p>
                         @Html.Raw(Model.Content)
                     </p>
-      
-@*                    <blockquote>
-                        <p>
-                            Area for a quote
-                        </p>
+
+                    @*                    <blockquote>
+                    <p>
+                    Area for a quote
+                    </p>
                     </blockquote>*@
-@*                    <figure class="wp-block-image">
-                        <img src="~/img/aldebaran-s-uXchDIKs4qI-unsplash.jpg" alt="Author Images">
-                        <figcaption>
-                            caption for image
-                        </figcaption>
+                    @*                    <figure class="wp-block-image">
+                    <img src="~/img/aldebaran-s-uXchDIKs4qI-unsplash.jpg" alt="Author Images">
+                    <figcaption>
+                    caption for image
+                    </figcaption>
                     </figure>
                     <h2>SubHeader</h2>
-      
+
                     <figure class="wp-block-image">
-                        <img src="~/img/aldebaran-s-qtRF_RxCAo0-unsplash.jpg" alt="Author Images">
-                       
-                     </figcaption>
+                    <img src="~/img/aldebaran-s-qtRF_RxCAo0-unsplash.jpg" alt="Author Images">
+
+                    </figcaption>
                     </figure>
                     <h3>SubHeader </h3>*@
-     
+
                     <p>Click <a asp-action="Index" asp-controller="Home">here</a> to return to blog posts.</p>
 
 
-                 <div class="tagcloud">
+                    <div class="tagcloud">
 
 
                         @foreach (Tag tag in Model.Tags)
                         {
-                                <a asp-controller="Tags" asp-action="Details" asp-route-id="@tag.Id">
+                            <a asp-controller="Tags" asp-action="Details" asp-route-id="@tag.Id">
                                 @tag.Name
-                                </a>
+                            </a>
                         }
 
 
@@ -143,31 +143,24 @@
 
                     <!-- Start Author  -->
                     <!-- End Author  -->
-
-
-
-
                     <!-- Start Comment Form Area  -->
-                    @if (User.IsInRole("Admin"))
+                    @*                    <div class="axil-comment-area">
+                    <div class="axil-total-comment-post">
+                    <div class="title">
+                    <h4 class="mb--0">30+ Comments</h4>
+                    </div>
+                    <div class="add-comment-button cerchio">
+                    <a class="axil-button button-rounded" href="post-details.html" tabindex="0"><span>Add Your Comment</span></a>
+                    </div>
+                    </div>*@
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        
-                    }
-@*                    <div class="axil-comment-area">
-                        <div class="axil-total-comment-post">
-                            <div class="title">
-                                <h4 class="mb--0">30+ Comments</h4>
-                            </div>
-                            <div class="add-comment-button cerchio">
-                                <a class="axil-button button-rounded" href="post-details.html" tabindex="0"><span>Add Your Comment</span></a>
-                            </div>
-                        </div>*@
-                        @if (User.IsInRole("Admin"))
-                        {
-                                                    <div class="comment-respond">
+
+                        <div class="comment-respond">
                             <h4 class="title">Post a comment</h4>
                             <form asp-controller="Comments" asp-action="Create" asp-route-slug="@Model.Slug" method="post">
 
-                                <input type="hidden" asp-for="Id" name="BlogPostId"  />
+                                <input type="hidden" asp-for="Id" name="BlogPostId" />
                                 <input name="BlogPostId" value="@Model.Id" type="hidden" />
                                 <p class="comment-notes">
                                     <span id="email-notes">
@@ -183,7 +176,7 @@
                                         </div>
                                     </div>
 
-  
+
                                     <div class="col-lg-12">
                                         <div class="form-submit cerchio">
                                             <input name="submit" type="submit" id="submit" class="axil-button button-rounded" value="Post Comment">
@@ -192,67 +185,89 @@
                                 </div>
                             </form>
                         </div>
-                        }
-                        <!-- Start Comment Respond  -->
+                    }
+                    else
+                    {
+                        <div class="my-5">
+                            <p class="display-6">Please <a asp-area="Identity" asp-page="/Account/Login">Sign In</a> or register to leave or reply to comments. Thanks!</p>
+                        </div>
 
-                        <!-- End Comment Respond  -->
-                        <!-- Start Comment Area  -->
-                        <div class="axil-comment-area">
-                            <h4 class="title">@Model.Comments.Count Comment(s)</h4>
-                            <ul class="comment-list">
-                                <!-- Start Single Comment  -->
-                                @foreach (var comment in Model.Comments)
-                                {
-                                    <li class="comment">
-                                        <div class="comment-body">
-                                            <div class="single-comment">
-                                                <div class="comment-img">
-                                                    <img src="assets/images/post-images/author/author-b2.png" alt="Author Images">
-                                                </div>
-                                                <div class="comment-inner">
-                                                    <h6 class="commenter">
-                                                        <a class="hover-flip-item-wrapper" href="#">
-                                                            <span class="hover-flip-item">
-                                                                <span data-text="@comment.Author!.FullName">@comment.Author!.FullName</span>
-                                                            </span>
-                                                        </a>
-                                                    </h6>
-                                                    <div class="comment-meta">
-                                                        <div class="time-spent">@Model.Created.ToString("MMM dd, yyyy")</div>
-                                                        <div class="reply-edit">
-                                                            <div class="reply">
-                                                                <a class="comment-reply-link hover-flip-item-wrapper" href="#">
-                                                                    <span class="hover-flip-item">
-                                                                        <span data-text="Reply">Reply</span>
-                                                                    </span>
-                                                                </a>
-                                                            </div>
+                    }
+
+
+                    <!-- Start Comment Respond  -->
+                    <!-- End Comment Respond  -->
+                    <!-- Start Comment Area  -->
+                    <div class="axil-comment-area">
+                        <h4 class="title">@Model.Comments.Count Comment(s)</h4>
+                        <ul class="comment-list">
+                            <!-- Start Single Comment  -->
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <li class="comment">
+                                    <div class="comment-body">
+                                        <div class="single-comment">
+                                            <div class="comment-img">
+                                                <img src="assets/images/post-images/author/author-b2.png" alt="Author Images">
+                                            </div>
+                                            <div class="comment-inner">
+                                                <h6 class="commenter">
+                                                    <a class="hover-flip-item-wrapper" href="#">
+                                                        <span class="hover-flip-item">
+                                                            <span data-text="@comment.Author!.FullName">@comment.Author!.FullName</span>
+                                                        </span>
+                                                    </a>
+                                                </h6>
+                                                <div class="comment-meta">
+                                                    <div class="time-spent">@Model.Created.ToString("MMM dd, yyyy")</div>
+                                                    <div class="reply-edit">
+                                                        <div class="reply">
+                                                            <a class="comment-reply-link hover-flip-item-wrapper" href="#">
+                                                                <span class="hover-flip-item">
+                                                                    <span data-text="Reply">Reply</span>
+                                                                </span>
+                                                            </a>
                                                         </div>
                                                     </div>
-                                                    <div class="comment-text">
-                                                        <p class="b2">
-                                                            @comment.Body
-                                                        </p>
-                                                    </div>
+                                                </div>
+                                                <div class="comment-text">
+                                                    <p class="b2">
+                                                        @comment.Body
+                                                    </p>
                                                 </div>
                                             </div>
+                                            @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                                            {
+                                                <div class="d-flex justify-content-end">
+
+
+
+                                                    <a class="mx-3 btn " asp-controller="Comments" asp-action="Delete" asp-route-id="@comment.Id">
+                                                        <i class="fa fa-trash fa-2x"></i>
+                                                    </a>
+
+
+
+                                                </div>
+                                            }
+
                                         </div>
-                                               
-                                    </li>
-                                }
-                                <!-- End Single Comment  -->
-                                <!-- Start Single Comment  -->
- 
-                                <!-- End Single Comment  -->
-                            </ul>
-                        </div>
-                        <!-- End Comment Area  -->
+                                    </div>
+
+                                </li>
+                            }
+                            <!-- End Single Comment  -->
+                            <!-- Start Single Comment  -->
+                            <!-- End Single Comment  -->
+                        </ul>
                     </div>
-                    <!-- End Comment Form Area  -->
+                    <!-- End Comment Area  -->
                 </div>
+                <!-- End Comment Form Area  -->
             </div>
         </div>
     </div>
+</div>
 </div>
 <!-- End Post Single Wrapper  -->
 <!-- Start More Stories Area  -->
@@ -270,7 +285,7 @@
             <!-- Start Stories Post  -->
             @foreach (BlogPost blogPost in (await _blogPostService.GetPopularBlogPosts()).Take(3))
             {
-            
+
 
 
 
@@ -286,26 +301,26 @@
 
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <!-- Start Post List  -->
-                      <div class="content-block post-medium mb--20">
-                    <div class="post-thumbnail">
-                        <a asp-action="Details" asp-controller="BlogPosts" asp-route-slug="@blogPost.Slug">
-                            <img src="@_ImageService.ConvertByteArrayToFile(blogPost.ImageData!, blogPost.ImageType!, (int)DefaultImage.BlogPostImage)" alt="">
-                        </a>
-                    </div>
-                    <div class="post-content">
-                        <h6 class="title">
+                    <div class="content-block post-medium mb--20">
+                        <div class="post-thumbnail">
                             <a asp-action="Details" asp-controller="BlogPosts" asp-route-slug="@blogPost.Slug">
-                                @blogPost.Title
+                                <img src="@_ImageService.ConvertByteArrayToFile(blogPost.ImageData!, blogPost.ImageType!, (int)DefaultImage.BlogPostImage)" alt="">
                             </a>
-                        </h6>
-                        <div class="post-meta">
-                            <ul class="post-meta-list">
-                                <li> @blogPost.Created.ToString("MMM dd, yyyy")</li>
-                                <li>300k Views</li>
-                            </ul>
+                        </div>
+                        <div class="post-content">
+                            <h6 class="title">
+                                <a asp-action="Details" asp-controller="BlogPosts" asp-route-slug="@blogPost.Slug">
+                                    @blogPost.Title
+                                </a>
+                            </h6>
+                            <div class="post-meta">
+                                <ul class="post-meta-list">
+                                    <li> @blogPost.Created.ToString("MMM dd, yyyy")</li>
+                                    <li>300k Views</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
                     <!-- End Post List  -->
                 </div>
 
@@ -322,82 +337,82 @@
 
 
             <!-- Start Stories Post  -->
-@*            <!-- Start Stories Post  -->
+            @*            <!-- Start Stories Post  -->
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <!-- Start Post List  -->
-                <div class="post-stories content-block mt--30">
-                    <div class="post-thumbnail">
-                        <a href="post-details.html">
-                            <img src="assets/images/post-single/stories-02.jpg" alt="Post Images">
-                        </a>
-                    </div>
-                    <div class="post-content">
-                        <div class="post-cat">
-                            <div class="post-cat-list">
-                                <a href="#">DESIGN</a>
-                            </div>
-                        </div>
-                        <h5 class="title">
-                            <a href="post-details.html">
-                                Microsoft and Bridgestone launch real-time
-                                tire
-                            </a>
-                        </h5>
-                    </div>
-                </div>
-                <!-- End Post List  -->
+            <!-- Start Post List  -->
+            <div class="post-stories content-block mt--30">
+            <div class="post-thumbnail">
+            <a href="post-details.html">
+            <img src="assets/images/post-single/stories-02.jpg" alt="Post Images">
+            </a>
+            </div>
+            <div class="post-content">
+            <div class="post-cat">
+            <div class="post-cat-list">
+            <a href="#">DESIGN</a>
+            </div>
+            </div>
+            <h5 class="title">
+            <a href="post-details.html">
+            Microsoft and Bridgestone launch real-time
+            tire
+            </a>
+            </h5>
+            </div>
+            </div>
+            <!-- End Post List  -->
             </div>
             <!-- Start Stories Post  -->
             <!-- Start Stories Post  -->
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <!-- Start Post List  -->
-                <div class="post-stories content-block mt--30">
-                    <div class="post-thumbnail">
-                        <a href="post-details.html">
-                            <img src="assets/images/post-single/stories-03.jpg" alt="Post Images">
-                        </a>
-                    </div>
-                    <div class="post-content">
-                        <div class="post-cat">
-                            <div class="post-cat-list">
-                                <a href="#">PRODUCT UPDATES</a>
-                            </div>
-                        </div>
-                        <h5 class="title">
-                            <a href="post-details.html">
-                                Microsoft and Bridgestone launch real-time
-                                tire
-                            </a>
-                        </h5>
-                    </div>
-                </div>
-                <!-- End Post List  -->
+            <!-- Start Post List  -->
+            <div class="post-stories content-block mt--30">
+            <div class="post-thumbnail">
+            <a href="post-details.html">
+            <img src="assets/images/post-single/stories-03.jpg" alt="Post Images">
+            </a>
+            </div>
+            <div class="post-content">
+            <div class="post-cat">
+            <div class="post-cat-list">
+            <a href="#">PRODUCT UPDATES</a>
+            </div>
+            </div>
+            <h5 class="title">
+            <a href="post-details.html">
+            Microsoft and Bridgestone launch real-time
+            tire
+            </a>
+            </h5>
+            </div>
+            </div>
+            <!-- End Post List  -->
             </div>
             <!-- Start Stories Post  -->
             <!-- Start Stories Post  -->
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <!-- Start Post List  -->
-                <div class="post-stories content-block mt--30">
-                    <div class="post-thumbnail">
-                        <a href="post-details.html">
-                            <img src="assets/images/post-single/stories-04.jpg" alt="Post Images">
-                        </a>
-                    </div>
-                    <div class="post-content">
-                        <div class="post-cat">
-                            <div class="post-cat-list">
-                                <a href="#">COLLABORATION</a>
-                            </div>
-                        </div>
-                        <h5 class="title">
-                            <a href="post-details.html">
-                                Microsoft and Bridgestone launch real-time
-                                tire
-                            </a>
-                        </h5>
-                    </div>
-                </div>
-                <!-- End Post List  -->
+            <!-- Start Post List  -->
+            <div class="post-stories content-block mt--30">
+            <div class="post-thumbnail">
+            <a href="post-details.html">
+            <img src="assets/images/post-single/stories-04.jpg" alt="Post Images">
+            </a>
+            </div>
+            <div class="post-content">
+            <div class="post-cat">
+            <div class="post-cat-list">
+            <a href="#">COLLABORATION</a>
+            </div>
+            </div>
+            <h5 class="title">
+            <a href="post-details.html">
+            Microsoft and Bridgestone launch real-time
+            tire
+            </a>
+            </h5>
+            </div>
+            </div>
+            <!-- End Post List  -->
             </div>*@
             <!-- Start Stories Post  -->
         </div>

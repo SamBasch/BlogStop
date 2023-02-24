@@ -10,9 +10,13 @@ using BlogStop.Models;
 using Microsoft.AspNetCore.Identity;
 using BlogStop.Services.Intefaces;
 using BlogStop.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace BlogStop.Controllers
 {
+
+    [Authorize(Roles = "Admin")]
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -154,6 +158,8 @@ namespace BlogStop.Controllers
         }
 
         // GET: Comments/Delete/5
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Comments == null)
@@ -175,6 +181,9 @@ namespace BlogStop.Controllers
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+
+    
         public async Task<IActionResult> DeleteConfirmed(int? id)
         {
             if(id == null)
