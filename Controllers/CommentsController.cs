@@ -64,6 +64,7 @@ namespace BlogStop.Controllers
         }
 
         // GET: Comments/Create
+        [AllowAnonymous]
         public IActionResult Create()
         {
            
@@ -75,6 +76,7 @@ namespace BlogStop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([Bind("Id,Body,Created,Updated,UpdateReason,BlogPostId,AuthorId")] Comment comment, string? Slug)
         {
 
