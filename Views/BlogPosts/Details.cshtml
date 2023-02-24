@@ -216,7 +216,10 @@
                                     <div class="comment-body">
                                         <div class="single-comment">
                                             <div class="comment-img">
-                                                <img src="assets/images/post-images/author/author-b2.png" alt="Author Images">
+                                                <span class="user-img">
+                                                    <img src="@_ImageService.ConvertByteArrayToFile(comment.Author!.ImageData!, comment.Author!.ImageType!, (int)DefaultImage.BlogUserImage)" alt="Post Images" />
+                                                    <span class="status online"></span>
+                                                </span>
                                             </div>
                                             <div class="comment-inner">
                                                 <h6 class="commenter">
