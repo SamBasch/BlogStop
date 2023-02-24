@@ -199,7 +199,15 @@
                     <!-- End Comment Respond  -->
                     <!-- Start Comment Area  -->
                     <div class="axil-comment-area">
-                        <h4 class="title">@Model.Comments.Count Comment(s)</h4>
+
+                        @if (Model.Comments.Count == 1)
+                        {
+                            <h4 class="title">1 Comment</h4>
+                        } else
+                        {
+                            <h4 class="title">@Model.Comments.Count Comments</h4>
+                        }
+                       
                         <ul class="comment-list">
                             <!-- Start Single Comment  -->
                             @foreach (var comment in Model.Comments)

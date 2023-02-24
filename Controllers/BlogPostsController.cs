@@ -202,7 +202,7 @@ namespace BlogStop.Controllers
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Abstract,Content,Created,Updated,Slug,IsDeleted,IsPublished,CategoryId,Image")] BlogPost blogPost, string? stringTags)
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Abstract,Content,Created,Updated,Slug,IsDeleted,IsPublished,CategoryId,Image,ImageType,ImageFile")] BlogPost blogPost, string? stringTags)
         {
             if (id != blogPost.Id)
             {

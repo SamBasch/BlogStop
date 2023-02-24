@@ -11,7 +11,7 @@ namespace BlogStop.Services
         private readonly string _defaultUserImage = "/img/DefaultUserImage.png";
         private readonly string _defaultBlogImage = "/img/DefaultBlogImage.jpg";
         private readonly string _defaultCategoryImage = "/img/DefaultCategoryImage.png";
-        private readonly string _defaultAuthorImage = "/img/DefaultAuthorImage.jpeg";
+
       
 
 
@@ -28,8 +28,7 @@ namespace BlogStop.Services
                     case 1: return _defaultUserImage;
                     case 2: return _defaultBlogImage;
                     case 3: return _defaultCategoryImage;
-                    case 4: return _defaultAuthorImage;
-
+             
 
                 }
             }
@@ -49,6 +48,17 @@ namespace BlogStop.Services
                 throw;
             }  
         }
+
+
+
+
+
+
+
+
+
+
+
 
         public async Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file)
         {
