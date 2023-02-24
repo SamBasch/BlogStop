@@ -209,7 +209,8 @@ namespace BlogStop.Controllers
                 return NotFound();
             }
 
-           
+
+            ModelState.Remove("Slug");
 
             if (ModelState.IsValid)
             {

@@ -62,12 +62,12 @@
                                         <i class="fa fa-edit fa-2x"></i>
                                     </a>
 
-                                    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-slug="@blogPost.Slug">
+                                    <a class="mx-3 btn btn-outline-secondary" asp-action="Details" asp-route-slug="@blogPost.Slug">
                                         <i class="fa fa-newspaper fa-2x" aria-hidden="true"></i>
                                     </a>
 
-                                    <a class="btn btn-outline-secondary"asp-controller="Comments" asp-action="Create" asp-route-id="@blogPost.Id" asp-route-slug="@blogPost.Slug">
-                                        <i class="fa fa-commenting"></i>
+                                    <a class="mx-3 btn btn-outline-danger"asp-controller="Comments" asp-action="Delete" asp-route-id="@blogPost.Id" asp-route-slug="@blogPost.Slug">
+                                        <i class="fa fa-trash fa-2x"></i>
                                     </a>
 
                                 </div>
