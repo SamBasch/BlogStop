@@ -10850,14 +10850,23 @@ blockquote p {
   display: -ms-flexbox;
   display: flex;
 }
-.comment-list .comment .single-comment .comment-img {
-  margin-bottom: 15px;
-  min-width: 60px;
-  margin-right: 20px;
-}
+    .comment-list .comment .single-comment .comment-img {
+        margin-bottom: 15px;
+        max-width: 200px;
+        max-height: 200px;
+        min-width: 60px;
+        margin-right: 20px;
+    }
 .comment-list .comment .single-comment .comment-img img {
   border-radius: 100%;
+  max-width: 200px;
+  max-height: 200px;
   width: 100%;
+}
+
+.comment-img {
+    max-width: 200px;
+    max-height: 200px;
 }
 .comment-list .comment .commenter {
   margin-bottom: 4px;
