@@ -1240,12 +1240,72 @@ font-family: 'Red Hat Display', sans-serif;
 }
 
 .bg_image--3 {
-    background-image: url(../images/bg/contact_banner_fullsize.png) !important;
+    background-image: url(../images/bg/contact_banner_mobile_576.png) !important;
 }
 
 .bg_image--4 {
     background-image: url(../images/bg/bg-image-4.jpg);
 }
+
+
+
+
+
+
+
+
+@media (min-width: 576px) {
+
+    .bg_image--3 {
+        background-image: url(../images/bg/contact_banner_mobile_768_actual.png) !important;
+    }
+    
+}
+
+
+@media (min-width: 768px) {
+
+    .bg_image--3 {
+        background-image: url(../images/bg/contact_banner__992.png) !important;
+    }
+   
+}
+ 
+@media (min-width: 992px) {
+    .bg_image--3 {
+        background-image: url(../images/bg/contact_banner_1200.png) !important;
+    }
+}
+
+ 
+@media (min-width: 1200px) {
+
+    .bg_image--3 {
+        background-image: url(../images/bg/contact_banner_1400.png) !important;
+    }
+
+}
+
+
+@media (min-width: 1400px) {
+
+    .bg_image--3 {
+        background-image: url(../images/bg/contact_banner_fullsize.png) !important;
+    }
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Height and width */
 .fullscreen {
