@@ -704,6 +704,16 @@ p {
     transition: all 0.3s ease;
 }
 
+body.active-dark-mode .my-page-link {
+    color: #ffffff;
+    background: #212121;
+}
+
+body.active-dark-mode .header-search-form.open .header.header-search-form {
+    color: #ffffff;
+    background: #212121;
+}
+
 .my-page-item a.my-page-link:hover, a.my-page-link:active {
     color: #fff;
     background-color: #ff4242;
@@ -1266,14 +1276,14 @@ font-family: 'Red Hat Display', sans-serif;
 @media (min-width: 768px) {
 
     .bg_image--3 {
-        background-image: url(../images/bg/contact_banner__992.png) !important;
+        background-image: url(../images/bg/contact_banner_mobile_768.png) !important;
     }
    
 }
  
 @media (min-width: 992px) {
     .bg_image--3 {
-        background-image: url(../images/bg/contact_banner_1200.png) !important;
+        background-image: url(../images/bg/contact_banner__992.png) !important;
     }
 }
 
@@ -1281,7 +1291,7 @@ font-family: 'Red Hat Display', sans-serif;
 @media (min-width: 1200px) {
 
     .bg_image--3 {
-        background-image: url(../images/bg/contact_banner_1400.png) !important;
+        background-image: url(../images/bg/contact_banner_1200.png) !important;
     }
 
 }
@@ -1290,7 +1300,7 @@ font-family: 'Red Hat Display', sans-serif;
 @media (min-width: 1400px) {
 
     .bg_image--3 {
-        background-image: url(../images/bg/contact_banner_fullsize.png) !important;
+        background-image: url(../images/bg/contact_banner_1400.png) !important;
     }
  
 }
@@ -9285,6 +9295,7 @@ Header Styles
             border-radius: 4px;
             height: 50px;
             background-color: var(--color-white);
+            color: #000000;
             padding-left: 20px;
             padding-right: 45px;
         }

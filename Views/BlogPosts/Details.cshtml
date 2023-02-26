@@ -60,7 +60,14 @@
                                                     </h6>
                                                     <ul class="post-meta-list">
                                                         <li>@Model.Created</li>
-                                                        <li>300k Views</li>
+                                                        @if (@Model.Comments.Count == 1)
+                                                        {
+                                                            <li class="title">1 Comment</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="title">@Model.Comments.Count Comments</li>
+                                                        }
                                                     </ul>
                                                 </div>
                                             </div>
@@ -189,7 +196,7 @@
                     else
                     {
                         <div class="my-5">
-                            <p class="display-6">Please <a asp-area="Identity" asp-page="/Account/Login">Sign In</a> or register to leave or reply to comments. Thanks!</p>
+                            <p class="display-6">Please <a asp-area="Identity" asp-page="/Account/Login">Sign In</a> or register to leave a comment. Thanks!</p>
                         </div>
 
                     }
@@ -203,11 +210,12 @@
                         @if (Model.Comments.Count == 1)
                         {
                             <h4 class="title">1 Comment</h4>
-                        } else
+                        }
+                        else
                         {
                             <h4 class="title">@Model.Comments.Count Comments</h4>
                         }
-                       
+
                         <ul class="comment-list">
                             <!-- Start Single Comment  -->
                             @foreach (var comment in Model.Comments)
@@ -282,19 +290,9 @@
 </div>
 <!-- End Post Single Wrapper  -->
 <!-- Start More Stories Area  -->
-
-
-            <!-- Start Stories Post  -->
-
-
-
-
-
-
-
-
-            <!-- Start Stories Post  -->
-            @*            <!-- Start Stories Post  -->
+<!-- Start Stories Post  -->
+<!-- Start Stories Post  -->
+@*            <!-- Start Stories Post  -->
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
             <!-- Start Post List  -->
             <div class="post-stories content-block mt--30">
@@ -371,12 +369,8 @@
             </div>
             <!-- End Post List  -->
             </div>*@
-            <!-- Start Stories Post  -->
+<!-- Start Stories Post  -->
         </div>
     </div>
 </div>
 <!-- End More Stories Area  -->
-
-
-
-
