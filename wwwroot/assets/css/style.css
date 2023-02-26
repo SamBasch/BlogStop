@@ -386,14 +386,6 @@ th {
 
 
 
-
-
-.comment-author-img {
-    max-height: 105px !important;
-    max-width: 105px !important;
-}
-
-
 td,
 .wp-block-calendar tfoot td {
     border: 1px solid var(--color-border);
@@ -12510,32 +12502,23 @@ blockquote p {
 
 .comment-list .comment .single-comment .comment-img {
   margin-bottom: 15px;
-  min-width: 60px;
+   max-width: 105px !important;
+ max-height: 105px !important;
+
   margin-right: 20px;
 
 }
 
 
-.comment-list .comment .single-comment .comment-img {
- max-width: 200px !important;
- max-height: 200px !important;
-
-}
 
 .comment-list .comment .single-comment .comment-img img { 
 border-radius: 100%;
- max-width: 200px !important;
- max-height: 200px !important;
+ max-width: 105px !important;
+ max-height: 105px !important;
  width: 100%;
 
  }
 
-
-
- .comment-list .comment .single-comment .comment-img img {
-  max-width: 200px !important;
-  max-height: 200px !important;
-  }
 
     .comment-list .comment .commenter {
         margin-bottom: 4px;
