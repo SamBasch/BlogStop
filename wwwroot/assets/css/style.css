@@ -384,8 +384,14 @@ th {
 }
 
 .user-img {
-    height: 105px;
-    width: 105px;
+    max-height: 105px;
+    max-width: 105px;
+}
+
+
+.user-img img {
+    max-height: 105px;
+    max-width: 105px;
 }
 
 td,
