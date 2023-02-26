@@ -123,7 +123,7 @@ namespace BlogStop.Controllers
                 string? swalMessage = string.Empty;
                 try
                 {
-                    emailData.EmailSubject = ($"{emailData.Name} Sent You A Message From Techture");
+                    emailData.EmailSubject = ($"{emailData.Name} Sent You A Message From BlogStop");
                     emailData.EmailBody = ($"""<strong>{emailData.Name}</strong> sent a message:<br><br>{emailData.EmailBody}<br><br><strong>Their email is:<a href="mailto:{emailData.EmailAddress}">{emailData.EmailAddress}</a></strong>""");
                     await _emailService.SendEmailAsync("baschnagelsam@gmail.com", emailData.EmailSubject, emailData.EmailBody!);
                     swalMessage = "Sucess! Your email has been sent.";
