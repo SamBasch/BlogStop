@@ -30,7 +30,7 @@
     ============================================ -->
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/assets/css/vendor/bootstrap.min.css">
-    
+
     <link rel="stylesheet" href="~/assets/css/vendor/font-awesome.css">
     <link rel="stylesheet" href="~/assets/css/vendor/slick.css">
     <link rel="stylesheet" href="~/assets/css/vendor/slick-theme.css">
@@ -204,18 +204,21 @@
                                         </a>
 
 
-                                        @if(User.Identity.IsAuthenticated) {
-                                        <div class="dropdown-menu animate__slideInDown">
-                                            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">My Profile</a>
-                                            <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit();">Logout</a>
-                                        </div>
-                                        } else {
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <div class="dropdown-menu animate__slideInDown">
+                                                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">My Profile</a>
+                                                <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit();">Logout</a>
+                                            </div>
+                                        }
+                                        else
+                                        {
 
 
-                                        <div class="dropdown-menu animate__slideInDown">
-                                            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">Sign In</a>
-                                            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register</a>
-                                        </div>
+                                            <div class="dropdown-menu animate__slideInDown">
+                                                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">Sign In</a>
+                                                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                            </div>
 
 
                                         }
@@ -230,7 +233,7 @@
                                     <li class="nav-item dropdown has-arrow main-drop">
                                         <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">Login</a>
 
-                              
+
 
                                         <div class="dropdown-menu animate__slideInDown">
                                             <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">Sign In</a>
@@ -265,12 +268,14 @@
         <!-- Start Mobile Menu Area  -->
         <div class="popup-mobilemenu-area">
             <div class="inner">
-                <div class="mobile-menu-top">
+                <div class="mobile-menu-top axil-header">
                     <div class="logo">
-                       
+
+                        <a asp-action="Index" asp-controller="Home">
                             <img class="dark-logo" src="~/assets/images/logo//Color logo - no background.svg" height="50" alt="Logo">
                             <img class="light-logo" src="~/assets/images/logo/color-logo-light.svg" height="50" alt="Logo">
-         
+                        </a>
+
                     </div>
                     <div class="mobile-close">
                         <div class="icon">
@@ -343,7 +348,7 @@
                                         <img class="dark-logo" src="~/assets/images/logo//Color logo - no background.svg" height="50" alt="Logo">
                                         <img class="light-logo" src="~/assets/images/logo/color-logo-light.svg" height="50" alt="Logo">
                                     </a>
-                     
+
                                 </div>
                                 <ul class="mainmenu justify-content-start">
                                     <li>
