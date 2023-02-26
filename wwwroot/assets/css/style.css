@@ -383,6 +383,11 @@ th {
   text-transform: uppercase;
 }
 
+.user-img img {
+    height: 105px;
+    width: 105px;
+}
+
 td,
 .wp-block-calendar tfoot td {
   border: 1px solid var(--color-border);
