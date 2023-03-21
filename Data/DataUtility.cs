@@ -13,6 +13,10 @@ namespace BlogStop.Data
 
         private const string _moderatorRole = "Moderator";
 
+        private const string _demoRole = "DemoUser";
+
+        private const string _demoEmail = "demologin@blogstop.com";
+
         private const string _adminEmail = "FrederickMeanstonAdmin@mailinator.com";
 
         private const string _moderatorEmail = "FrederickMeanstonMod@mailinator";
@@ -70,6 +74,7 @@ namespace BlogStop.Data
             await SeedRolesAsync(roleManagerSvc);
 
 
+            await SeedDemoUserSync(userManagerSvc);
 
             //seed users
             await SeedUsersAsync(dbContextSvc, configurationSvc, userManagerSvc);
@@ -90,6 +95,10 @@ namespace BlogStop.Data
             {
                 await roleManager.CreateAsync(new IdentityRole(_moderatorRole));
             }
+
+
+                await roleManager.CreateAsync(new IdentityRole(_demoRole));
+
         }
 
        private static async Task SeedUsersAsync(ApplicationDbContext context, IConfiguration configuration, UserManager<BlogUser> userManager)
@@ -132,6 +141,55 @@ namespace BlogStop.Data
             }
 
         }
+
+
+
+
+
+
+        private static async Task SeedDemoUserSync(UserManager<BlogUser> userManager)
+        {
+
+
+            BlogUser demoUser = new()
+            {
+
+                UserName = "demologin@blogstop.com",
+                Email = "demologin@blogstop.com",
+                FirstName = "Demo",
+                LastName = "Login",
+                EmailConfirmed = true
+            };
+
+            await userManager.CreateAsync(demoUser, "Abc&123!");
+            await userManager.AddToRoleAsync(demoUser, _demoRole);
+            try
+            {
+
+                BlogUser? user = await userManager.FindByEmailAsync(demoUser.Email);
+
+
+                if (user == null)
+                {
+                    await userManager.CreateAsync(demoUser, "Abc&123!");
+                    await userManager.AddToRoleAsync(demoUser, _demoRole);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine("*************** ERROR ***************");
+                Console.WriteLine("Error Seeding Demo Login User.");
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("**************************************");
+                throw;
+            }
+
+
+        }
+
+
 
     }
 }

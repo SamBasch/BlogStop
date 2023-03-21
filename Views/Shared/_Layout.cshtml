@@ -114,11 +114,55 @@
                                     </li>
                                     @* <li><a href="home-lifestyle-blog.html">About</a></li>*@
                                     <li><a asp-action="ContactMe" asp-controller="Home">Contact</a></li>
-                                    @if (User.Identity!.IsAuthenticated && !User.IsInRole("Admin"))
+                                    @if (User.Identity!.IsAuthenticated && User.IsInRole("Admin"))
                                     {
                                         <li><a asp-action="MyLikes" asp-controller="BlogPosts">My Likes</a></li>
                                     }
                                     @if (User.IsInRole("Admin"))
+                                    {
+                                        <li class="menu-item-has-children">
+                                            <a href="#">Author</a>
+                                            <ul class="axil-submenu">
+                                                <li>
+                                                    <a class="hover-flip-item-wrapper" asp-controller="BlogPosts" asp-action="AdminPage">
+                                                        <span class="">
+                                                            <span>Admin</span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="hover-flip-item-wrapper" asp-controller="BlogPosts" asp-action="Create">
+                                                        <span class="">
+                                                            <span>New Post</span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="hover-flip-item-wrapper" asp-controller="BlogPosts" asp-action="AdminPage">
+                                                        <span class="hover-flip-item">
+                                                            <span data-text="Manage Posts">Manage Posts</span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Index">
+                                                        <span class="hover-flip-item">
+                                                            <span data-text="Manage Categories">Manage Categories</span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="hover-flip-item-wrapper" asp-controller="Tags" asp-action="Index">
+                                                        <span class="hover-flip-item">
+                                                            <span data-text="Manage Tags">Manage Tags</span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    }
+
+                                    @if (User.IsInRole("DemoUser"))
                                     {
                                         <li class="menu-item-has-children">
                                             <a href="#">Author</a>
@@ -289,7 +333,7 @@
 
                     </li>
 
-                    @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin, DemoUser"))
                     {
                         <li class="menut-item"><a asp-action="AdminPage" asp-controller="BlogPosts">Maintenance</a></li>
                     }
